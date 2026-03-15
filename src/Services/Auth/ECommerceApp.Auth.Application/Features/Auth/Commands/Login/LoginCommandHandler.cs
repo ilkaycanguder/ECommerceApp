@@ -4,11 +4,8 @@ using ECommerceApp.Auth.Domain.Interfaces;
 using ECommerceApp.Shared.Abstractions;
 using ECommerceApp.Shared.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DomainEntities = ECommerceApp.Auth.Domain.Entities;
+
 
 namespace ECommerceApp.Auth.Application.Features.Auth.Commands.Login
 {
@@ -41,10 +38,10 @@ namespace ECommerceApp.Auth.Application.Features.Auth.Commands.Login
             var accessToken = _tokenService.GenerateAccessToken(user);
             var refreshTokenValue = _tokenService.GenerateRefreshToken();
 
-            var refreshToken = RefreshToken.Create(
-                user.Id,
-                refreshTokenValue,
-                DateTime.UtcNow.AddDays(7));
+            var refreshToken = DomainEntities.RefreshToken.Create(
+                 user.Id,
+                 refreshTokenValue,
+                 DateTime.UtcNow.AddDays(7));
 
             await _refreshTokenRepository.AddAsync(refreshToken, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
