@@ -2,6 +2,7 @@
 using ECommerceApp.Log.Application.Interfaces;
 using ECommerceApp.Log.Infrastructure.Persistence.Context;
 using ECommerceApp.Log.Infrastructure.Persistence.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceApp.Log.Infrastructure.Persistence.Repositories
 {
