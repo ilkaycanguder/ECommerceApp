@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace ECommerceApp.Shared.Models
 {
+    /// <summary>
+    /// Result Pattern implementasyonu.
+    /// 
+    /// Result Pattern: Exception fırlatmak yerine başarı/hata durumları
+    /// explicit tiplerle ifade edilir. Bu yaklaşım:
+    /// - Performansı artırır (exception stack trace maliyeti yok)
+    /// - Hata yönetimini zorlar (caller Result'ı kontrol etmek zorunda)
+    /// - Kod okunabilirliğini artırır
+    /// 
+    /// Single Responsibility: Her Result nesnesi ya başarı ya hata taşır, ikisi birden olamaz.
+    /// </summary>
     public class Result
     {
         protected Result(bool isSuccess, Error error)

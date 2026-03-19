@@ -13,6 +13,20 @@ using System.Threading.Tasks;
 
 namespace ECommerceApp.Auth.Application.Features.Auth.Commands.Register
 {
+    /// <summary>
+    /// Register Command Handler — CQRS Pattern implementasyonu.
+    /// 
+    /// CQRS: Bu sınıf sadece "yazma" sorumluluğuna sahiptir.
+    /// Okuma işlemleri GetUserQueryHandler tarafından yönetilir.
+    /// 
+    /// Pipeline Behavior: Bu handler çalışmadan önce ValidationBehavior devreye girer.
+    /// RegisterCommandValidator doğrulamayı yapar, hata varsa handler'a ulaşmaz.
+    /// 
+    /// Repository Pattern: IUserRepository aracılığıyla veri erişimi soyutlanmıştır.
+    /// EF Core'a doğrudan bağımlılık yoktur, test edilebilirlik sağlanmıştır.
+    /// 
+    /// Unit of Work: SaveChangesAsync tek bir transaction'da tüm değişiklikleri kaydeder.
+    /// </summary>
     public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<UserDto>>
     {
         private readonly IUserRepository _userRepository;

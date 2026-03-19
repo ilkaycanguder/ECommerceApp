@@ -4,6 +4,16 @@ using StackExchange.Redis;
 
 namespace ECommerceApp.Product.Infrastructure.Services.Cache
 {
+    /// <summary>
+    /// Redis Cache Service — Cache-Aside Pattern implementasyonu.
+    /// 
+    /// Dependency Inversion Principle: ICacheService interface'i Application katmanında
+    /// tanımlanmıştır. Infrastructure bu interface'i implement eder.
+    /// Application katmanı Redis'i bilmez, sadece interface'i kullanır.
+    /// 
+    /// Single Responsibility: Sadece cache işlemlerinden sorumludur.
+    /// RemoveByPrefixAsync ile toplu cache invalidation desteklenir.
+    /// </summary>
     public class RedisCacheService : ICacheService
     {
         private readonly IConnectionMultiplexer _redis;

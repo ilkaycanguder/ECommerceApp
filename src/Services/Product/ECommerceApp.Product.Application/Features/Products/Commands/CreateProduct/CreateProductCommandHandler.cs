@@ -10,6 +10,21 @@ using ProductEntity = ECommerceApp.Product.Domain.Entities.Product;
 
 namespace ECommerceApp.Product.Application.Features.Products.Commands.CreateProduct
 {
+    /// <summary>
+    /// Create Product Command Handler — CQRS Pattern implementasyonu.
+    /// 
+    /// CQRS: Bu sınıf sadece "yazma" sorumluluğuna sahiptir.
+    /// Ürün listeleme ve getirme işlemleri Query Handler'lar tarafından yönetilir.
+    /// 
+    /// Domain Events + Outbox Pattern: Ürün DB'ye kaydedildikten sonra
+    /// ProductAddedEvent fırlatılır. Bu event RabbitMQ üzerinden Log servisine iletilir.
+    /// Böylece servisler arası loose coupling sağlanır.
+    /// 
+    /// Cache Invalidation: Yeni ürün eklenince "products" prefix'li tüm cache key'leri
+    /// temizlenir. Bir sonraki listeleme isteği güncel veriyi DB'den alır.
+    /// 
+    /// Repository Pattern: IProductRepository aracılığıyla veri erişimi soyutlanmıştır.
+    /// </summary>
     public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<ProductDto>>
     {
         private readonly IProductRepository _productRepository;

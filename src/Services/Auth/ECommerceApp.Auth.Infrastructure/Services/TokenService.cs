@@ -13,6 +13,16 @@ using System.Threading.Tasks;
 
 namespace ECommerceApp.Auth.Infrastructure.Services
 {
+    /// <summary>
+    /// JWT Token Service — Strategy Pattern implementasyonu.
+    /// 
+    /// Dependency Inversion Principle: ITokenService interface'i Domain katmanında
+    /// tanımlanmıştır. Infrastructure bu interface'i implement eder.
+    /// Domain katmanı JWT implementasyonunu bilmez, sadece interface'i kullanır.
+    /// 
+    /// Options Pattern: JWT ayarları appsettings.json'dan okunur.
+    /// Ortam değişkenleri ile override edilebilir (12 Faktör Uygulama).
+    /// </summary>
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;

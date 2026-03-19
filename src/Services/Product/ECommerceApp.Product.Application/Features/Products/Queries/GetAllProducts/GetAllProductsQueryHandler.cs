@@ -12,6 +12,20 @@ using System.Threading.Tasks;
 
 namespace ECommerceApp.Product.Application.Features.Products.Queries.GetAllProducts
 {
+    /// <summary>
+    /// Get All Products Query Handler — CQRS Pattern implementasyonu.
+    /// 
+    /// CQRS: Bu sınıf sadece "okuma" sorumluluğuna sahiptir.
+    /// Veri değişikliği yapmaz, yan etkisi yoktur.
+    /// 
+    /// Cache-Aside Pattern implementasyonu:
+    /// 1. Önce Redis Cache kontrol edilir
+    /// 2. Cache'de veri varsa direkt döner (DB'ye gidilmez)
+    /// 3. Cache'de yoksa DB'den alınır
+    /// 4. Alınan veri 5 dakika süreyle cache'e yazılır
+    /// 
+    /// Bu pattern ile DB yükü azaltılır, response süresi kısalır.
+    /// </summary>
     public sealed class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, Result<IEnumerable<ProductDto>>>
     {
         private readonly IProductRepository _productRepository;

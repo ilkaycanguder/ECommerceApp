@@ -3,6 +3,18 @@ using MediatR;
 
 namespace ECommerceApp.Product.Application.Behaviors
 {
+    /// <summary>
+    /// Validation Pipeline Behavior — Decorator Pattern implementasyonu.
+    /// 
+    /// Pipeline Behavior: MediatR pipeline'ına eklenen bu behavior,
+    /// her Command veya Query handler'dan ÖNCE otomatik olarak çalışır.
+    /// 
+    /// Open/Closed Principle: Handler'lar değiştirilmeden yeni validation
+    /// kuralları eklenebilir. Her Command için ayrı Validator sınıfı yazılır.
+    /// 
+    /// Single Responsibility: Validation sorumluluğu handler'lardan alınmış,
+    /// bu sınıfa verilmiştir. Her sınıf tek bir sorumluluğa sahiptir.
+    /// </summary>
     public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
       where TRequest : IRequest<TResponse>
     {
