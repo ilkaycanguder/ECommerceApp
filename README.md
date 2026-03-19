@@ -39,18 +39,18 @@
 
 ## Servisler
 
-### Auth Service — `ECommerceApp.Auth.API`
+### Auth Service — `ECommerceApp.Auth.API` — `https://localhost:7044`
 
 JWT token üretimi ve refresh token yönetimi.
 
 | Endpoint | Method | Açıklama |
 |---|---|---|
-| `/api/auth/register` | POST | Kullanıcı kaydı |
-| `/api/auth/login` | POST | Kullanıcı girişi |
-| `/api/auth/refresh-token` | POST | Token yenileme |
-| `/api/auth/user/{id}` | GET | Kullanıcı bilgisi |
+| `/api/auths/register` | POST | Kullanıcı kaydı |
+| `/api/auths/login` | POST | Kullanıcı girişi |
+| `/api/auths/refresh-token` | POST | Token yenileme |
+| `/api/auths/user/{id}` | GET | Kullanıcı bilgisi |
 
-### Product Service — `ECommerceApp.Product.API`
+### Product Service — `ECommerceApp.Product.API` — `https://localhost:7120`
 
 Ürün yönetimi, Redis cache ve RabbitMQ event publishing.
 
@@ -61,7 +61,7 @@ JWT token üretimi ve refresh token yönetimi.
 | `/api/products` | POST | Ürün ekleme |
 | `/api/products/{id}` | PUT | Ürün güncelleme (JWT gerekli) |
 
-### Log Service — `ECommerceApp.Log.API`
+### Log Service — `ECommerceApp.Log.API` — `https://localhost:7273`
 
 Merkezi log yönetimi, RabbitMQ event consuming.
 
@@ -69,6 +69,16 @@ Merkezi log yönetimi, RabbitMQ event consuming.
 |---|---|---|
 | `/api/logs` | GET | Log listesi (JWT gerekli) |
 | `/api/logs` | POST | Log ekleme (JWT gerekli) |
+
+### Gateway — `ECommerceApp.Gateway` — `https://localhost:7004`
+
+YARP Reverse Proxy ile tüm servislere tek noktadan erişim ve Rate Limiting.
+
+| Route | Yönlendirme |
+|---|---|
+| `/api/auths/{**}` | Auth Service |
+| `/api/products/{**}` | Product Service |
+| `/api/logs/{**}` | Log Service (JWT gerekli) |
 
 ---
 
@@ -153,9 +163,16 @@ Her servisin `appsettings.json` dosyasında şu ayarları kendi ortamına göre 
 
 ### 4. Servisleri çalıştır
 
-Her servis bağımsız olarak çalıştırılabilir. Visual Studio'da birden fazla startup project ayarlamak için:
+Visual Studio'da birden fazla startup project ayarlamak için:
 
-`Solution` → sağ tıkla → `Set Startup Projects` → `Multiple startup projects` → Auth.API, Product.API, Log.API için `Start` seç → `OK`
+`Solution` → sağ tıkla → `Set Startup Projects` → `Multiple startup projects` → şu projeleri `Start` olarak işaretle:
+
+- `ECommerceApp.Gateway`
+- `ECommerceApp.Auth.API`
+- `ECommerceApp.Product.API`
+- `ECommerceApp.Log.API`
+
+`OK` → `F5`
 
 ---
 
@@ -198,6 +215,7 @@ ECommerceApp
 | Pipeline Behavior | Validation ve cross-cutting concerns |
 | Domain Events | Servisler arası event iletişimi |
 | Observer | Log servisi event tüketimi |
+| Gateway | YARP ile merkezi routing ve rate limiting |
 
 ---
 
@@ -213,7 +231,3 @@ prod/v1.0.0  → production branch'i (test tamamlandıktan sonra merge)
 
 MIT
 ```
-
-Bu içeriği `README.md` dosyasına yapıştır, commit at. Commit mesajı:
-```
-docs: update README with project structure and setup instructions
